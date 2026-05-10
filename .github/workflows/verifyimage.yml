@@ -11,7 +11,7 @@ permissions:
 env:
   # sha256sum format: <hash><space><format (space for text)><file name>
   MODSECURITY_RECOMMENDED: "ccff8ba1f12428b34ff41960d8bf773dd9f62b9a7c77755247a027cb01896d4f  modsecurity.conf-recommended"
-  GO_FTW_VERSION: '1.3.0'
+  GO_FTW_VERSION: '2.1.0'
 
 jobs:
   prepare:
@@ -202,6 +202,10 @@ jobs:
           sed -i \
             's#image: owasp/modsecurity-crs:${{ contains(matrix.target, 'apache') && 'apache' || 'nginx' }}.*#image: ${{ matrix.target }}-verification#' \
             crs/tests/docker-compose.yml
+      - name: Patch nginx overrides for nginx 1.30.0 (920100-4 now returns 405)
+        run: |
+          yq e -i '(.test_overrides[] | select(.rule_id == 920100 and .test_ids[0] == 4 and (.test_ids | length) == 1) | .output.status) = 405' \
+            crs/tests/regression/nginx-overrides.yaml
       - name: Run CRS tests for ${{ matrix.target }}
         # Log flushing isn't reliable enough for go-ftw (https://github.com/coreruleset/go-ftw/issues/473)
         if: ${{!contains(matrix.target, 'nginx-alpine')}}
