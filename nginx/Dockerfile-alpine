@@ -48,8 +48,7 @@ RUN set -eux; \
     git clone https://github.com/owasp-modsecurity/ModSecurity --branch "v${MODSEC3_VERSION}" --depth 1 --recursive; \
     cd ModSecurity; \
     ARCH=$(gcc -print-multiarch); \
-    sed -ie "s/i386-linux-gnu/${ARCH}/g" build/ssdeep.m4; \
-    sed -ie "s/i386-linux-gnu/${ARCH}/g" build/pcre2.m4; \
+    sed -ie "s/i386-linux-gnu/${ARCH}/g" build/msc_find_lib.m4; \
     ./build.sh; \
     ./configure ${MODSEC3_FLAGS}; \
     make -j$(nproc) install; \
