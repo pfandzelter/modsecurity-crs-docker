@@ -196,8 +196,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd crs
+          ARCH="${{ startsWith(matrix.platforms, 'linux/arm') && 'arm64' || 'amd64' }}"
           gh release download -R coreruleset/go-ftw "v${{ env.GO_FTW_VERSION }}" \
-            -p "ftw_${{ env.GO_FTW_VERSION }}_linux_amd64.tar.gz" -O - | tar -xzvf - ftw
+            -p "ftw_${{ env.GO_FTW_VERSION }}_linux_${ARCH}.tar.gz" -O - | tar -xzvf - ftw
       - name: Patch CRS compose file to use verification image
         run: |
           sed -i \
