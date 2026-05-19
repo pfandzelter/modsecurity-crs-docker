@@ -21,10 +21,11 @@ jobs:
         uses: docker/bake-action/subaction/matrix@5be5f02ff8819ecd3092ea6b2e6261c31774f2b4 # v6
         with:
           target: default
+          fields: platforms
 
   build:
     name: Build ${{ matrix.target }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ startsWith(matrix.platforms, 'linux/arm') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     needs:
       - prepare
     permissions:
@@ -75,6 +76,8 @@ jobs:
           files: |
             ./docker-bake.hcl
           targets: ${{ matrix.target }}
+          set: |
+            *.platform=${{ matrix.platforms }}
           push: true
           provenance: true
           sbom: true
@@ -90,4 +93,3 @@ jobs:
             images+="${tag}@${DIGEST} "
           done
           cosign sign --yes ${images}
-
