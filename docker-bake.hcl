@@ -45,7 +45,7 @@ variable "nginx-version" {
 
 variable "httpd-version" {
     # renovate: depName=httpd datasource=docker
-    default = "2.4.67"
+    default = "2.4.68"
 }
 
 variable "modsecurity-nginx-version" {
