@@ -50,7 +50,7 @@ Examples:
 LTS (Long-Term Support) tags are stable tags pointing to a designated LTS release. They are updated less frequently than stable tags and are intended for users who prioritize stability over new features.
 
 LTS Tags are composed of:
-   * CRS version, in the format `<minor>` or `<minor>.<patch>`
+   * CRS version, in the format `<major>.<minor>` or `<major>.<minor>.<patch>`
    * web server variant
    * OS variant (optional)
    * `lts` suffix
