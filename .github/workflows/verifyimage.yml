@@ -26,6 +26,7 @@ jobs:
         uses: docker/bake-action/subaction/matrix@5be5f02ff8819ecd3092ea6b2e6261c31774f2b4 # v6
         with:
           target: default
+          fields: platforms
       - name: Check modsecurity recommended
         run: |
           curl -sSL https://raw.githubusercontent.com/owasp-modsecurity/ModSecurity/v3/master/modsecurity.conf-recommended -o modsecurity.conf-recommended
@@ -33,7 +34,7 @@ jobs:
           sha256sum -c sha256sum.txt
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ startsWith(matrix.platforms, 'linux/arm') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     permissions:
       contents: read
       packages: write
@@ -73,10 +74,10 @@ jobs:
           files: |
             ./docker-bake.hcl
           targets: ${{ matrix.target }}
-          # Build only linux/amd64 and tag the images as verification builds.
+          # Build only the specified platform and tag as verification build.
           # Create a tar archive and load the image into Docker.
           set: |
-            *.platform=linux/amd64
+            *.platform=${{ matrix.platforms }}
             ${{ matrix.target }}.tags=${{ matrix.target }}-verification
             *.output=type=docker,dest=${{ matrix.target }}-verification.tar
             *.output=type=docker
@@ -195,8 +196,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd crs
+          ARCH="${{ startsWith(matrix.platforms, 'linux/arm') && 'arm64' || 'amd64' }}"
           gh release download -R coreruleset/go-ftw "v${{ env.GO_FTW_VERSION }}" \
-            -p "ftw_${{ env.GO_FTW_VERSION }}_linux_amd64.tar.gz" -O - | tar -xzvf - ftw
+            -p "ftw_${{ env.GO_FTW_VERSION }}_linux_${ARCH}.tar.gz" -O - | tar -xzvf - ftw
       - name: Patch CRS compose file to use verification image
         run: |
           sed -i \
