@@ -47,13 +47,27 @@
       "matchDepNames": [
         "ModSecurity2"
       ],
-      "allowedVersions": "/^v2.*/"
+      "allowedVersions": "/^v2.*/",
+      "minimumReleaseAge": "0 days"
+    },
+    {
+      "matchDepNames": [
+        "ModSecurity3"
+      ],
+      "minimumReleaseAge": "0 days"
     },
     {
       "matchDepNames": [
         "nginxinc/nginx-unprivileged"
       ],
-      "allowedVersions": "/^[0-9]+\\.(?:[1-9]\\d*)?[02468]\\.[0-9]+$/"
+      "allowedVersions": "/^[0-9]+\\.(?:[1-9]\\d*)?[02468]\\.[0-9]+$/",
+      "minimumReleaseAge": "0 days"
+    },
+    {
+      "matchDepNames": [
+        "httpd"
+      ],
+      "minimumReleaseAge": "0 days"
     }
   ],
   "customManagers": [
