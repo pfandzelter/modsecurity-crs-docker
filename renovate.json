@@ -9,6 +9,22 @@
   ],
   "packageRules": [
     {
+      "matchDepNames": [
+        "coreruleset-v3-lts"
+      ],
+      "allowedVersions": ">=3.3.0 <3.4.0",
+      "minimumReleaseAge": "0 days",
+      "groupName": "CRS v3 LTS updates"
+    },
+    {
+      "matchDepNames": [
+        "coreruleset-v4-lts"
+      ],
+      "allowedVersions": ">=4.25.0 <4.26.0",
+      "minimumReleaseAge": "0 days",
+      "groupName": "CRS v4 LTS updates"
+    },
+    {
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
       "matchUpdateTypes": [
